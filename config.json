@@ -1,0 +1,29 @@
+{
+  "services": ["http://localhost:8080/query"],
+  "gateway-port": 8085,
+  "private-port": 8083,
+  "metrics-port": 8084,
+  "log-level": "info",
+  "poll-interval": "5s",
+  "max-requests-per-query": 50,
+  "max-service-response-size": 1048576,
+  "disable-introspection": false,
+  "plugins": [
+    {
+      "name": "admin-ui"
+    },
+    {
+      "name": "cors",
+      "config": {
+        "allowed-origins": ["*"],
+        "allowed-headers": ["*"],
+        "allow-credentials": true,
+        "max-age": 3600,
+        "debug": true
+      }
+    },
+    {
+      "name": "playground"
+    }
+  ]
+}

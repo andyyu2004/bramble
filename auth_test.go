@@ -11,7 +11,7 @@ import (
 )
 
 func TestUnmarshalRoles(t *testing.T) {
-	var roles = map[string]OperationPermissions{
+	roles := map[string]OperationPermissions{
 		"nested_role": {
 			AllowedRootQueryFields: AllowedFields{
 				AllowedSubfields: map[string]AllowedFields{
@@ -112,14 +112,15 @@ func TestFilterAuthorizedFields(t *testing.T) {
 		}
 		} }`)
 		perms := OperationPermissions{
-			AllowedRootQueryFields: AllowedFields{AllowedSubfields: map[string]AllowedFields{
-				"movies": {
-					AllowedSubfields: map[string]AllowedFields{
-						"id":    {},
-						"title": {},
+			AllowedRootQueryFields: AllowedFields{
+				AllowedSubfields: map[string]AllowedFields{
+					"movies": {
+						AllowedSubfields: map[string]AllowedFields{
+							"id":    {},
+							"title": {},
+						},
 					},
 				},
-			},
 			},
 		}
 		errs := perms.FilterAuthorizedFields(query.Operations[0])
@@ -167,14 +168,15 @@ func TestFilterAuthorizedFields(t *testing.T) {
 		}
 		`)
 		perms := OperationPermissions{
-			AllowedRootQueryFields: AllowedFields{AllowedSubfields: map[string]AllowedFields{
-				"movies": {
-					AllowedSubfields: map[string]AllowedFields{
-						"id":    {},
-						"title": {},
+			AllowedRootQueryFields: AllowedFields{
+				AllowedSubfields: map[string]AllowedFields{
+					"movies": {
+						AllowedSubfields: map[string]AllowedFields{
+							"id":    {},
+							"title": {},
+						},
 					},
 				},
-			},
 			},
 		}
 		errs := perms.FilterAuthorizedFields(query.Operations[0])
@@ -207,14 +209,15 @@ func TestFilterAuthorizedFields(t *testing.T) {
 			}
 		}`)
 		perms := OperationPermissions{
-			AllowedRootQueryFields: AllowedFields{AllowedSubfields: map[string]AllowedFields{
-				"movies": {
-					AllowedSubfields: map[string]AllowedFields{
-						"id":    {},
-						"title": {},
+			AllowedRootQueryFields: AllowedFields{
+				AllowedSubfields: map[string]AllowedFields{
+					"movies": {
+						AllowedSubfields: map[string]AllowedFields{
+							"id":    {},
+							"title": {},
+						},
 					},
 				},
-			},
 			},
 		}
 		errs := perms.FilterAuthorizedFields(query.Operations[0])
@@ -301,15 +304,16 @@ func TestFilterSchema(t *testing.T) {
 
 	t.Run("field selection", func(t *testing.T) {
 		perms := OperationPermissions{
-			AllowedRootQueryFields: AllowedFields{AllowedSubfields: map[string]AllowedFields{
-				"movies": {
-					AllowedSubfields: map[string]AllowedFields{
-						"id":      {},
-						"title":   {},
-						"release": {},
+			AllowedRootQueryFields: AllowedFields{
+				AllowedSubfields: map[string]AllowedFields{
+					"movies": {
+						AllowedSubfields: map[string]AllowedFields{
+							"id":      {},
+							"title":   {},
+							"release": {},
+						},
 					},
 				},
-			},
 			},
 		}
 		filteredSchema := perms.FilterSchema(schema)
@@ -330,18 +334,19 @@ func TestFilterSchema(t *testing.T) {
 
 	t.Run("same type, multiple paths, different allowed fields", func(t *testing.T) {
 		perms := OperationPermissions{
-			AllowedRootQueryFields: AllowedFields{AllowedSubfields: map[string]AllowedFields{
-				"movies": {
-					AllowedSubfields: map[string]AllowedFields{
-						"release": {},
+			AllowedRootQueryFields: AllowedFields{
+				AllowedSubfields: map[string]AllowedFields{
+					"movies": {
+						AllowedSubfields: map[string]AllowedFields{
+							"release": {},
+						},
+					},
+					"movieByTitle": {
+						AllowedSubfields: map[string]AllowedFields{
+							"title": {},
+						},
 					},
 				},
-				"movieByTitle": {
-					AllowedSubfields: map[string]AllowedFields{
-						"title": {},
-					},
-				},
-			},
 			},
 		}
 		filteredSchema := perms.FilterSchema(schema)
@@ -362,11 +367,12 @@ func TestFilterSchema(t *testing.T) {
 
 	t.Run("allow all", func(t *testing.T) {
 		perms := OperationPermissions{
-			AllowedRootQueryFields: AllowedFields{AllowedSubfields: map[string]AllowedFields{
-				"movies": {
-					AllowAll: true,
+			AllowedRootQueryFields: AllowedFields{
+				AllowedSubfields: map[string]AllowedFields{
+					"movies": {
+						AllowAll: true,
+					},
 				},
-			},
 			},
 		}
 		filteredSchema := perms.FilterSchema(schema)
@@ -388,11 +394,12 @@ func TestFilterSchema(t *testing.T) {
 
 	t.Run(`input type`, func(t *testing.T) {
 		perms := OperationPermissions{
-			AllowedRootQueryFields: AllowedFields{AllowedSubfields: map[string]AllowedFields{
-				"movieSearch": {
-					AllowAll: true,
+			AllowedRootQueryFields: AllowedFields{
+				AllowedSubfields: map[string]AllowedFields{
+					"movieSearch": {
+						AllowAll: true,
+					},
 				},
-			},
 			},
 		}
 		filteredSchema := perms.FilterSchema(schema)
@@ -423,11 +430,12 @@ func TestFilterSchema(t *testing.T) {
 
 	t.Run(`union, allow all`, func(t *testing.T) {
 		perms := OperationPermissions{
-			AllowedRootQueryFields: AllowedFields{AllowedSubfields: map[string]AllowedFields{
-				"somethingRandom": {
-					AllowAll: true,
+			AllowedRootQueryFields: AllowedFields{
+				AllowedSubfields: map[string]AllowedFields{
+					"somethingRandom": {
+						AllowAll: true,
+					},
 				},
-			},
 			},
 		}
 		filteredSchema := perms.FilterSchema(schema)
@@ -456,13 +464,14 @@ func TestFilterSchema(t *testing.T) {
 
 	t.Run(`union`, func(t *testing.T) {
 		perms := OperationPermissions{
-			AllowedRootQueryFields: AllowedFields{AllowedSubfields: map[string]AllowedFields{
-				"somethingRandom": {
-					AllowedSubfields: map[string]AllowedFields{
-						"id": {},
+			AllowedRootQueryFields: AllowedFields{
+				AllowedSubfields: map[string]AllowedFields{
+					"somethingRandom": {
+						AllowedSubfields: map[string]AllowedFields{
+							"id": {},
+						},
 					},
 				},
-			},
 			},
 		}
 		filteredSchema := perms.FilterSchema(schema)
@@ -485,13 +494,14 @@ func TestFilterSchema(t *testing.T) {
 
 	t.Run(`interface`, func(t *testing.T) {
 		perms := OperationPermissions{
-			AllowedRootQueryFields: AllowedFields{AllowedSubfields: map[string]AllowedFields{
-				"someone": {
-					AllowedSubfields: map[string]AllowedFields{
-						"name": {},
+			AllowedRootQueryFields: AllowedFields{
+				AllowedSubfields: map[string]AllowedFields{
+					"someone": {
+						AllowedSubfields: map[string]AllowedFields{
+							"name": {},
+						},
 					},
 				},
-			},
 			},
 		}
 		filteredSchema := perms.FilterSchema(schema)
@@ -514,11 +524,12 @@ func TestFilterSchema(t *testing.T) {
 
 	t.Run(`interface, allow all`, func(t *testing.T) {
 		perms := OperationPermissions{
-			AllowedRootQueryFields: AllowedFields{AllowedSubfields: map[string]AllowedFields{
-				"someone": {
-					AllowAll: true,
+			AllowedRootQueryFields: AllowedFields{
+				AllowedSubfields: map[string]AllowedFields{
+					"someone": {
+						AllowAll: true,
+					},
 				},
-			},
 			},
 		}
 		filteredSchema := perms.FilterSchema(schema)

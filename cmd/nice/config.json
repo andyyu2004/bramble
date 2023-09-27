@@ -1,0 +1,26 @@
+{
+  "gateway-port": 8085,
+  "plugins": [
+    {
+      "name": "auth"
+    },
+    {
+      "name": "portal"
+    },
+    {
+      "name": "cors",
+      "config": {
+        "allow-credentials": true,
+        "allowed-headers": [
+          "Content-Type",
+          "X-Bramble-Debug",
+          "X-Movio-Tenant",
+          "X-Request-Id",
+          "Authorization"
+        ],
+        "allowed-origins": ["*"],
+        "max-age": 3600
+      }
+    }
+  ]
+}
